@@ -23,7 +23,6 @@ const props = defineProps({
 
 <style scoped>
 img {
-    /* max-width: 100px; */
-    width: clamp(69px, 16vw,175px);
+    width: clamp(69px, 18vw, 175px);
 }
 </style>

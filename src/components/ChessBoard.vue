@@ -19,7 +19,7 @@ const emit = defineEmits(['onCheckedCards'])
 const cardsDoubled = props.cards.concat(props.cards); // TODO: Dobla el número de cartas. Sugerencia: sale bastante fácil usando el operador de 'spread' (...) y el método .concat.
 
 // Variable de estado que guarde las cartas seleccionadas hasta el momento
-let selectedCards = [];
+const selectedCards = [];
 
 
 
@@ -32,10 +32,16 @@ const cardsChessBoard = reactive(cardsDoubled.map((card) => {
     }
 }));
 
+shuffleArray(cardsChessBoard);
+
+function shuffleArray(inputArray) {
+    inputArray.sort(() => Math.random() - 0.5);
+}
+
 function onCardClicked(card) {
 
     // Evitar que podamos hacer click en una carta ya revealda
-    if (card.reveal) {
+    if (card.reveal || selectedCards.length == 2) {
         return;
     }
 
@@ -57,37 +63,24 @@ function onCardClicked(card) {
         // Si su id NO es el mismo, hemos errado. Tenemos que darle la vuelta a la cartas.
         if (selectedCards[0].id != selectedCards[1].id) {
             // Con el this podemos acceder a toda la instancia del script
-
-            selectedCards[0].reveal = false;
-            selectedCards[1].reveal = false
-
+            setTimeout(() => {
+                selectedCards[0].reveal = false;
+                selectedCards[1].reveal = false;
+                selectedCards.pop();
+                selectedCards.pop();
+            }, 1000)
 
         }
         else {
             // la pareja es correcta. Hay que emitir un evento indicando que las dos cartas seleccionadas son iguales
+            selectedCards.pop();
+            selectedCards.pop();
+
         }
         // En cualquier caso, tenemos que 'reiniciar' el estado de la app para que podamos seleccionar las dos siguientes cartas
-        selectedCards = [];
     }
 
 
-
-
-    // Filtramos solo las que tienen el estado reveal
-    // const cardsRevealed = cardsChessBoard.filter(card => card.reveal);
-    // const numCardsRevealed = cardsRevealed.length;
-
-    // // Hemos seleccionado un número par de cartas?
-    // if (numCardsRevealed % 2 == 0) {
-    //     // comprobamos la última con la penúltima
-    //     console.log("cartas revelas", cardsRevealed)
-    //     console.log("numero de cartas revelas", numCardsRevealed)
-
-
-    //     if (cardsRevealed[numCardsRevealed - 1].id == cardsRevealed[numCardsRevealed - 2].id) {
-    //         console.log("Son correctas")
-    //     }
-    // }
 }
 
 
@@ -109,6 +102,7 @@ div {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     row-gap: 1rem;
     cursor: pointer;
+    user-select: none;
 
 }
 </style>
