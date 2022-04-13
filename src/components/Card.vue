@@ -1,7 +1,6 @@
 <!-- Card Component -->
 <script setup>
 
-
 // Definir propiedades del componente
 // La función recibe un parámetro que es un objeto con todas las propiedades del componente
 // Se pone nombredelapropiedad: tipo de variable
@@ -15,12 +14,16 @@ const props = defineProps({
 </script>
 
 <template>
-<!-- Podemos usar en el template directamente las propiedades, simplemente poniendo su nomre --> 
+    <!-- Podemos usar en el template directamente las propiedades, simplemente poniendo su nomre -->
 
     <img v-if="!reveal" :src="back" alt="pokemon card">
     <img v-else :src="front" alt="pokemon butterfly">
 
 </template>
 
-<style>
+<style scoped>
+img {
+    /* max-width: 100px; */
+    width: clamp(69px, 16vw,175px);
+}
 </style>
